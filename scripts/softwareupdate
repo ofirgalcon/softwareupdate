@@ -69,13 +69,18 @@ def get_softwareupdate_history():
     return {"softwareupdate_history":history}
 
 def get_xprotect():
-    # If less than 10.10, collect from legacy XProtect location
-    if getOsVersion() < 6:
-        return {}
-    elif getOsVersion() < 10:
-        xprotect_plist = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/XProtect.meta.plist'
+
+    # Check for XProtect's Info.plist
+    if os.path.isfile('/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/XProtect.meta.plist'):
+        xprotect_plist = "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/XProtect.meta.plist"
+    elif os.path.isfile('/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.meta.plist'):
+        xprotect_plist = "/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.meta.plist"
+    elif os.path.isfile('/Library/Apple/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.meta.plist'):
+        xprotect_plist = "/Library/Apple/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.meta.plist"
+    elif os.path.isfile('/Library/Apple/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.meta.plist'):
+        xprotect_plist = "/Library/Apple/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/XProtect.meta.plist"
     else:
-        xprotect_plist = '/System/Library/CoreServices/XProtect.bundle/Contents/Resources/XProtect.meta.plist'
+        return {}
 
     try:
         out = FoundationPlist.readPlist(xprotect_plist)
@@ -94,8 +99,8 @@ def get_xprotect():
     return xprotect
 
 def get_gatekeeper():          
-    # If less than 10.8, don't collect Gatekeeper data
-    if getOsVersion() < 8:
+    # If less than 10.8 (Darwin 12), don't collect Gatekeeper data
+    if getDarwinVersion() < 12:
         return {}
     else:
         gatekeeper_plist = '/private/var/db/gkopaque.bundle/Contents/Info.plist'
@@ -117,8 +122,8 @@ def get_gatekeeper():
     return gatekeeper
 
 def get_gatekeeper_disk():          
-    # If less than 10.8, don't collect Gatekeeper data
-    if getOsVersion() < 8:
+    # If less than 10.8 (Darwin 12), don't collect Gatekeeper data
+    if getDarwinVersion() < 8:
         return {}
     else:
         gatekeeper_plist = '/private/var/db/gke.bundle/Contents/Info.plist'
@@ -207,7 +212,7 @@ def get_seedutil():
             if 'Currently enrolled in: ' in item and '(null)' not in item:
                 seedutil["enrolled_seed"] = item.replace("Currently enrolled in: ", "").strip()
             elif 'Program: ' in item:
-                seedutil["program_seed"] = item.replace("Program: ", "").strip()
+                seedutil["program_seed"] = item.replace("Program: ", "").replace("(null)", "0").strip()
             elif 'Build is seed: ' in item:
                 seedutil["build_is_seed"] = to_bool(item.replace("Build is seed: ", "").strip())
             elif 'NSShowFeedbackMenu: ' in item:
@@ -222,10 +227,11 @@ def get_seedutil():
 
     return seedutil
 
-def getOsVersion():
-    """Returns the minor OS version."""
-    os_version_tuple = platform.mac_ver()[0].split('.')
-    return int(os_version_tuple[1])
+def getDarwinVersion():
+    """Returns the Darwin version."""
+    # Catalina -> 10.15.7 -> 19.6.0 -> 19
+    darwin_version_tuple = platform.release().split('.')
+    return int(darwin_version_tuple[0]) 
 
 def to_bool(s):
     if s == "":
