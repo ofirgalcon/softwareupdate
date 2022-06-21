@@ -98,6 +98,32 @@ def get_xprotect():
 
     return xprotect
 
+def get_xprotect_payloads():
+
+    # Check for XProtect's Info.plist
+    if os.path.isfile('/Library/Apple/System/Library/CoreServices/XProtect.app/Contents/Info.plist'):
+        xprotect_plist = "/Library/Apple/System/Library/CoreServices/XProtect.app/Contents/Info.plist"
+    else:
+        return {}
+
+    try:
+        out = FoundationPlist.readPlist(xprotect_plist)
+    except Exception:
+        return {}
+
+    xprotect = {}
+
+    for item in out:
+        if item == 'Bundle version string (short)':
+            xprotect['xprotect_payloads_version'] = str(out[item])
+        elif item == 'CFBundleShortVersionString':
+            xprotect['xprotect_payloads_version'] = str(out[item])
+
+    stat = os.stat(xprotect_plist)
+    xprotect['xprotect_payloads_last_modified'] = str(int(stat.st_mtime))
+
+    return xprotect
+
 def get_gatekeeper():          
     # If less than 10.8 (Darwin 12), don't collect Gatekeeper data
     if getDarwinVersion() < 12:
@@ -291,6 +317,7 @@ def main():
     result = merge_two_dicts(result, get_kext_exclude())
     result = merge_two_dicts(result, get_mrt())
     result = merge_two_dicts(result, get_seedutil())
+    result = merge_two_dicts(result, get_xprotect_payloads())
 
     # Write softwareupdate results to cache file
     cachedir = '%s/cache' % os.path.dirname(os.path.realpath(__file__))
