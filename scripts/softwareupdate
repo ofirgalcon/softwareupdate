@@ -1,16 +1,16 @@
-#!/usr/local/munkireport/munkireport-python2
+#!/usr/local/munkireport/munkireport-python3
 
 import subprocess
 import os
 import sys
 import platform
 import time
+
 sys.path.insert(0, '/usr/local/munki')
 sys.path.insert(0, '/usr/local/munkireport')
 
 from munkilib import FoundationPlist
 from Foundation import CFPreferencesCopyAppValue
-#from PyObjCTools import Conversion
 
 def get_software_update():
     
@@ -69,7 +69,6 @@ def get_softwareupdate_history():
     return {"softwareupdate_history":history}
 
 def get_xprotect():
-
     # Check for XProtect's Info.plist
     if os.path.isfile('/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/XProtect.meta.plist'):
         xprotect_plist = "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/XProtect.meta.plist"
@@ -234,7 +233,7 @@ def get_seedutil():
 
         seedutil = {}
 
-        for item in output.split('\n'):
+        for item in output.decode().split('\n'):
             if 'Currently enrolled in: ' in item and '(null)' not in item:
                 seedutil["enrolled_seed"] = item.replace("Currently enrolled in: ", "").strip()
             elif 'Program: ' in item:
@@ -302,10 +301,6 @@ def main():
     # Remove old softwareupdate.sh script, if it exists
     if os.path.isfile(os.path.dirname(os.path.realpath(__file__))+'/softwareupdate.sh'):
         os.remove(os.path.dirname(os.path.realpath(__file__))+'/softwareupdate.sh')
-
-    # Set the encoding
-    reload(sys)  
-    sys.setdefaultencoding('utf8')
 
     # Get results
     result = dict()
