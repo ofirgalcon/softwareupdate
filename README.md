@@ -51,3 +51,4 @@ Table Schema
 * softwareupdate_history - medium text - JSON string containing history of all software updates
 * xprotect_payloads_version - varchar(255) - version of XProtect Payloads installed
 * xprotect_payloads_last_modified - big integer - when XProtect Payloads was last installed
+* allow_prerelease_installation - boolean - if beta versions of macOS are allowed to be installed

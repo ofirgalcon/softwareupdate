@@ -51,5 +51,6 @@ class Softwareupdate_model extends Eloquent
       'softwareupdate_history',
       'xprotect_payloads_version',
       'xprotect_payloads_last_modified',
+      'allow_prerelease_installation',
     ];
 }

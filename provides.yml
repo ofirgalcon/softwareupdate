@@ -10,6 +10,8 @@ listings:
 widgets:
     softwareupdate_seed:
         view: softwareupdate_seed_widget
+    softwareupdate_allow_prerelease_installation:
+        view: softwareupdate_allow_prerelease_installation_widget
     softwareupdate_auto_update:
         view: softwareupdate_auto_update_widget
     softwareupdate_automaticcheckenabled:

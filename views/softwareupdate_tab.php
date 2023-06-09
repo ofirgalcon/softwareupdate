@@ -32,7 +32,7 @@ $(document).on('appReady', function(){
                 for (var prop in d){
                     // Skip skipThese
                     if(skipThese.indexOf(prop) == -1){
-                        if (d[prop] == '' || d[prop] == null){
+                        if ((d[prop] == '' || d[prop] == null) && d[prop] !== 0){
                            // Do nothing for empty values to blank them
 
                         } else if((prop == "lastfullsuccessfuldate" && d[prop] > 100) || (prop == "lastbackgroundsuccessfuldate" && d[prop] > 100) || (prop == "lastsuccessfuldate" && d[prop] > 100)){
@@ -67,6 +67,13 @@ $(document).on('appReady', function(){
                         } else if(prop == 'automaticdownload' && d[prop] == 0){
                            rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                         } else if(prop == 'automaticdownload' && d[prop] == -1){
+                        }
+
+                        else if(prop == 'allow_prerelease_installation' && d[prop] == 1){
+                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
+                        } else if(prop == 'allow_prerelease_installation' && d[prop] == 0){
+                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
+                        } else if(prop == 'allow_prerelease_installation' && d[prop] == -1){
                         }
 
                         else if(prop == 'build_is_seed' && d[prop] == 1){
@@ -155,6 +162,8 @@ $(document).on('appReady', function(){
                         } else if(prop == 'program_seed' && d[prop] == 3){
                            rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span class="label label-warning">'+i18n.t('softwareupdate.publicseed')+'</span></td></tr>';
                         } else if(prop == 'program_seed'){
+                           rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
+                        } else if(prop == 'enrolled_seed'){
                            rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
 
                         } else if(prop == 'mrt_version'){

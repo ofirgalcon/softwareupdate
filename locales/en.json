@@ -64,5 +64,8 @@
     "no_data": "No Data",
     "softwareupdate_history": "Software Update History",
     "xprotect_payloads_version": "XProtect Payloads Version",
-    "xprotect_payloads_last_modified": "XProtect Payloads Installed"
+    "xprotect_payloads_last_modified": "XProtect Payloads Installed",
+    "allow_prerelease_installation": "Allow Prerelease Installations",
+    "updates": "Updates",
+    "update": "Update"
 }

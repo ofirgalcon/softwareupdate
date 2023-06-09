@@ -48,5 +48,6 @@ $factory->define(Softwareupdate_model::class, function (Faker\Generator $faker) 
         'softwareupdate_history' => json_encode([]),
         'xprotect_payloads_version' => $faker->word(),
         'xprotect_payloads_last_modified' => $faker->dateTimeBetween('-1 month')->format('U'),
+        'allow_prerelease_installation' => $faker->boolean(),
     ];
 });

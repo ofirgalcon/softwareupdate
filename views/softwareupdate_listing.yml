@@ -22,30 +22,37 @@ table:
         i18n_header: softwareupdate.lastbackgroundsuccessfuldate
         formatter: timestampToMoment
     -
-        column: softwareupdate.inactiveupdates
-        i18n_header: softwareupdate.inactiveupdates
-    -
-        column: softwareupdate.catalogurl
-        i18n_header: softwareupdate.catalogurl
-    -
         column: softwareupdate.lastupdatesavailable
         i18n_header: softwareupdate.lastupdatesavailable
+        formatter: format_softwareupdate_updates_available
+    -
+        column: softwareupdate.program_seed
+        i18n_header: softwareupdate.program_seed
+        formatter: softwareupdate_seed
+    -
+        column: softwareupdate.enrolled_seed
+        i18n_header: softwareupdate.enrolled_seed
+        formatter: softwareupdate_seed
+    -
+        column: softwareupdate.allow_prerelease_installation
+        i18n_header: softwareupdate.allow_prerelease_installation
+        formatter: format_softwareupdate_yes_no
     -
         column: softwareupdate.automaticcheckenabled
         i18n_header: softwareupdate.automaticcheckenabled
-        formatter: binaryYesNo
+        formatter: format_softwareupdate_yes_no_rev
     -
         column: softwareupdate.automaticdownload
         i18n_header: softwareupdate.automaticdownload
-        formatter: binaryYesNo
+        formatter: format_softwareupdate_yes_no_rev
     -
         column: softwareupdate.configdatainstall
         i18n_header: softwareupdate.configdatainstall
-        formatter: binaryYesNo
+        formatter: format_softwareupdate_yes_no_rev
     -
         column: softwareupdate.criticalupdateinstall
         i18n_header: softwareupdate.criticalupdateinstall
-        formatter: binaryYesNo
+        formatter: format_softwareupdate_yes_no_rev
     -
         column: softwareupdate.xprotect_version
         i18n_header: softwareupdate.xprotect_version
@@ -62,6 +69,8 @@ table:
         column: softwareupdate.mrt_version
         i18n_header: softwareupdate.mrt_version
     -
-        column: softwareupdate.program_seed
-        i18n_header: softwareupdate.program_seed
-        formatter: softwareupdate_seed
+        column: softwareupdate.inactiveupdates
+        i18n_header: softwareupdate.inactiveupdates
+    -
+        column: softwareupdate.catalogurl
+        i18n_header: softwareupdate.catalogurl
