@@ -1,0 +1,13 @@
+type: button
+widget_id: su_allow_prerelease_installation-widget
+api_url: /module/softwareupdate/get_binary_widget/allow_prerelease_installation
+i18n_title: softwareupdate.allow_prerelease_installation
+icon: fa-flask
+listing_link: /show/listing/softwareupdate/softwareupdate
+buttons:
+  - label: 0
+    i18n_label: no
+    class: btn-danger 
+  - label: 1
+    i18n_label: yes
+    class: btn-success
