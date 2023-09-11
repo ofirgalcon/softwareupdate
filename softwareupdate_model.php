@@ -51,10 +51,5 @@ class Softwareupdate_model extends Eloquent
       'softwareupdate_history',
       'xprotect_payloads_version',
       'xprotect_payloads_last_modified',
-      'allow_prerelease_installation',
-      'managed_do_it_later_deferral_count',
-      'managed_do_it_later_user_notification_times',
-      'managed_product_keys',
-      'maximum_managed_do_it_later_deferral_count',
     ];
 }

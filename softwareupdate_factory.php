@@ -48,10 +48,5 @@ $factory->define(Softwareupdate_model::class, function (Faker\Generator $faker) 
         'softwareupdate_history' => json_encode([]),
         'xprotect_payloads_version' => $faker->word(),
         'xprotect_payloads_last_modified' => $faker->dateTimeBetween('-1 month')->format('U'),
-        'allow_prerelease_installation' => $faker->boolean(),
-        'managed_do_it_later_deferral_count' => $faker->numberBetween(0, 7),
-        'managed_do_it_later_user_notification_times' => $faker->dateTimeBetween('-1 month')->format('U'),
-        'managed_product_keys' => $faker->word(),
-        'maximum_managed_do_it_later_deferral_count' => $faker->numberBetween(7, 10),
     ];
 });

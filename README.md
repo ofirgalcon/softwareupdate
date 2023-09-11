@@ -51,8 +51,3 @@ Table Schema
 * softwareupdate_history - medium text - JSON string containing history of all software updates
 * xprotect_payloads_version - varchar(255) - version of XProtect Payloads installed
 * xprotect_payloads_last_modified - big integer - when XProtect Payloads was last installed
-* allow_prerelease_installation - boolean - if beta versions of macOS are allowed to be installed
-* managed_do_it_later_deferral_count - int - managed user deferral count
-* managed_do_it_later_user_notification_times - varchar(255) - managed user deferral times
-* managed_product_keys - varchar(255) - managed updates product keys
-* maximum_managed_do_it_later_deferral_count - int - maximum managed defarrals

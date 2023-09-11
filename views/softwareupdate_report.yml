@@ -9,19 +9,14 @@ row2:
 row3:
   softwareupdate_seed:
   softwareupdate_last_session_successful:
-  softwareupdate_allow_prerelease_installation:
+  softwareupdate_pending_recommended_updates:
 row4:
   softwareupdate_ignored_updates:
-  softwareupdate_pending_recommended_updates:
   softwareupdate_mrt_version:
+  softwareupdate_xprotect_version:
 row5:
   softwareupdate_gatekeeper_disk_version:
   softwareupdate_gatekeeper_version:
   softwareupdate_kext_exclude_version:
 row6:
-  softwareupdate_xprotect_version:
   softwareupdate_xprotect_payloads_version:
-row7:
-  softwareupdate_managed_updates_deferrals:
-  softwareupdate_managed_max_deferrals:
-  softwareupdate_managed_product_keys:
