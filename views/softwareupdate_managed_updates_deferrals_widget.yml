@@ -1,0 +1,9 @@
+type: scrollbox
+widget_id: softwareupdate-managed_do_it_later_deferral_count-widget
+api_url: /module/softwareupdate/get_scroll_widget/managed_do_it_later_deferral_count
+i18n_title: softwareupdate.managed_do_it_later_deferral_count
+icon: fa-hourglass-start
+listing_link: /show/listing/softwareupdate/softwareupdate
+search_key: label
+badge: count
+i18n_empty_result: no_data

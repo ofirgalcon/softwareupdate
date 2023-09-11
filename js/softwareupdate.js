@@ -36,4 +36,24 @@ var format_softwareupdate_updates_available = function(colNumber, row){
     col.html(colvar)
 }
 
-updates
+// Filters
+var ManagedDeferralCounterFilter = function(colNumber, d){
+    
+    // Look for 'between' statement todo: make generic
+    if(d.search.value.match(/^\d deferCount \d$/))
+    {
+        // Add column specific search
+        d.columns[colNumber].search.value = d.search.value.replace(/(\d) deferCount (\d)/, function(m, from, to){return ' BETWEEN ' + (from) + ' AND ' + (to)});
+        // Clear global search
+        d.search.value = '';
+    }
+
+    // Look for a bigger/smaller/equal statement
+    if(d.search.value.match(/^deferCount [<>=] \d$/))
+    {
+        // Add column specific search
+        d.columns[colNumber].search.value = d.search.value.replace(/.*([<>=] )(\d)$/, function(m, o, content){return o + (content)});
+        // Clear global search
+        d.search.value = '';
+    }
+}

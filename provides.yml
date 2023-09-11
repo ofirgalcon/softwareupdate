@@ -42,6 +42,12 @@ widgets:
         view: softwareupdate_pending_recommended_updates_widget
     softwareupdate_ignored_updates:
         view: softwareupdate_ignored_updates_widget
+    softwareupdate_managed_updates_deferrals:
+        view: softwareupdate_managed_updates_deferrals_widget
+    softwareupdate_managed_max_deferrals:
+        view: softwareupdate_managed_max_deferrals_widget     
+    softwareupdate_managed_product_keys:
+        view: softwareupdate_managed_product_keys_widget     
 reports:
     softwareupdate_report:
         view: softwareupdate_report

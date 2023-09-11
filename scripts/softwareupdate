@@ -37,6 +37,10 @@ def get_software_update():
     softwareupdate['automaticcheckenabled'] = to_bool(get_pref_value('AutomaticCheckEnabled', 'com.apple.SoftwareUpdate'))
     softwareupdate['auto_update'] = to_bool(get_pref_value('AutoUpdate', 'com.apple.commerce'))
     softwareupdate['auto_update_restart_required'] = to_bool(get_pref_value('AutoUpdateRestartRequired', 'com.apple.commerce'))
+    softwareupdate['managed_do_it_later_deferral_count'] = get_pref_value('ManagedDoItLaterDeferralCount', 'com.apple.SoftwareUpdate')
+    softwareupdate['managed_do_it_later_user_notification_times'] = get_pref_value('ManagedDoItLaterUserNotificationTimes', 'com.apple.SoftwareUpdate')
+    softwareupdate['managed_product_keys'] = get_pref_value('ManagedProductKeys', 'com.apple.SoftwareUpdate')
+    softwareupdate['maximum_managed_do_it_later_deferral_count'] = get_pref_value('MaximumManagedDoItLaterDeferralCount', 'com.apple.SoftwareUpdate')
 
     # If greater than macOS 13 (Darwin 22), default this key if blank
     softwareupdate['allow_prerelease_installation'] = to_bool(get_pref_value('AllowPreReleaseInstallation', 'com.apple.SoftwareUpdate'))
