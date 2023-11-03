@@ -20,7 +20,7 @@ class Softwareupdate_processor extends Processor
         $plist = array_change_key_case($parser->toArray(), CASE_LOWER);
 
         // Process each of the items
-        foreach (array('automaticcheckenabled', 'automaticdownload', 'configdatainstall', 'criticalupdateinstall', 'lastattemptsystemversion', 'lastbackgroundccdsuccessfuldate', 'lastbackgroundsuccessfuldate', 'lastfullsuccessfuldate', 'lastrecommendedupdatesavailable', 'lastresultcode', 'lastsessionsuccessful', 'lastsuccessfuldate', 'lastupdatesavailable', 'skiplocalcdn', 'recommendedupdates', 'mrxprotect', 'catalogurl', 'inactiveupdates', 'skip_download_lack_space', 'eval_critical_if_unchanged', 'one_time_force_scan_enabled', 'auto_update', 'auto_update_restart_required', 'xprotect_version', 'gatekeeper_version', 'gatekeeper_last_modified', 'gatekeeper_disk_version', 'gatekeeper_disk_last_modified', 'kext_exclude_version', 'kext_exclude_last_modified', 'mrt_version', 'mrt_last_modified', 'enrolled_seed', 'program_seed', 'build_is_seed', 'show_feedback_menu', 'disable_seed_opt_out', 'catalog_url_seed','softwareupdate_history', 'xprotect_payloads_version','xprotect_payloads_last_modified', 'allow_prerelease_installation', 'managed_do_it_later_deferral_count', 'managed_do_it_later_user_notification_times', 'managed_product_keys', 'maximum_managed_do_it_later_deferral_count', 'ddm_info') as $item) {
+        foreach (array('automaticcheckenabled', 'automaticdownload', 'configdatainstall', 'criticalupdateinstall', 'lastattemptsystemversion', 'lastbackgroundccdsuccessfuldate', 'lastbackgroundsuccessfuldate', 'lastfullsuccessfuldate', 'lastrecommendedupdatesavailable', 'lastresultcode', 'lastsessionsuccessful', 'lastsuccessfuldate', 'lastupdatesavailable', 'skiplocalcdn', 'recommendedupdates', 'mrxprotect', 'catalogurl', 'inactiveupdates', 'skip_download_lack_space', 'eval_critical_if_unchanged', 'one_time_force_scan_enabled', 'auto_update', 'auto_update_restart_required', 'xprotect_version', 'gatekeeper_version', 'gatekeeper_last_modified', 'gatekeeper_disk_version', 'gatekeeper_disk_last_modified', 'kext_exclude_version', 'kext_exclude_last_modified', 'mrt_version', 'mrt_last_modified', 'enrolled_seed', 'program_seed', 'build_is_seed', 'show_feedback_menu', 'disable_seed_opt_out', 'catalog_url_seed','softwareupdate_history', 'xprotect_payloads_version','xprotect_payloads_last_modified', 'allow_prerelease_installation', 'managed_do_it_later_deferral_count', 'managed_product_keys', 'maximum_managed_do_it_later_deferral_count', 'ddm_info') as $item) {
             // If key exists and is zero, set it to zero
             if ( array_key_exists($item, $plist) && $plist[$item] === 0 && $item != 'recommendedupdates' && $item != 'inactiveupdates') {
                 $modelData[$item] = 0;
@@ -41,13 +41,6 @@ class Softwareupdate_processor extends Processor
                 sort($inactiveupdateslist);
                 $inactiveupdateslistproper = implode(", ",$inactiveupdateslist);
                 $modelData[$item] = $inactiveupdateslistproper;
-
-             // Else if managed_do_it_later_user_notification_times, process for viewing
-            } else if (array_key_exists($item, $plist) && $item == 'managed_do_it_later_user_notification_times' && $plist[$item] != 0) {
-                $managed_do_it_later_user_notification_times_list = $plist["managed_do_it_later_user_notification_times"];
-                sort($managed_do_it_later_user_notification_times_list);
-                $managed_do_it_later_user_notification_times_list_proper = implode(", ",$managed_do_it_later_user_notification_times_list);
-                $modelData[$item] = $managed_do_it_later_user_notification_times_list_proper;
 
             } else if (array_key_exists($item, $plist) && $item == 'managed_product_keys' && $plist[$item] != 0) {
                 $managed_product_keys_list = $plist["managed_product_keys"];

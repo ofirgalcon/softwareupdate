@@ -53,7 +53,6 @@ Table Schema
 * xprotect_payloads_last_modified - big integer - when XProtect Payloads was last installed
 * allow_prerelease_installation - boolean - if beta versions of macOS are allowed to be installed
 * managed_do_it_later_deferral_count - int - managed user deferral count
-* managed_do_it_later_user_notification_times - varchar(255) - managed user deferral times
 * managed_product_keys - varchar(255) - managed updates product keys
-* maximum_managed_do_it_later_deferral_count - int - maximum managed defarrals
+* maximum_managed_do_it_later_deferral_count - int - maximum managed deferrals
 * ddm_info - text - string containing information about Declarative Device Management (DDM) declarations, macOS 14+ only
