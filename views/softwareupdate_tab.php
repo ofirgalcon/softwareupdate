@@ -39,6 +39,10 @@ $(document).on('appReady', function(){
                            var date = new Date(d[prop] * 1000);
                            rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span title="'+moment(date).fromNow()+'">'+moment(date).format('llll')+'</span></td></tr>';
 
+                        } else if((prop == "managed_do_it_later_user_notification_times" && d[prop] > 100) || (prop == "managed_do_it_later_user_notification_times" && d[prop] > 100) || (prop == "managed_do_it_later_user_notification_times" && d[prop] > 100)){
+                           var date = new Date(d[prop] * 1000);
+                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span title="'+moment(date).fromNow()+'">'+moment(date).format('llll')+'</span></td></tr>';
+
                         } else if((prop == "gatekeeper_disk_last_modified" && d[prop] > 100) || (prop == "gatekeeper_last_modified" && d[prop] > 100)){
                            var date = new Date(d[prop] * 1000);
                            rows_gatekeeper = rows_gatekeeper + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span title="'+moment(date).fromNow()+'">'+moment(date).format('llll')+'</span></td></tr>';

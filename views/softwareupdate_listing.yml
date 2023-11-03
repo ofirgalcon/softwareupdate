@@ -69,8 +69,15 @@ table:
         column: softwareupdate.mrt_version
         i18n_header: softwareupdate.mrt_version
     -
-        column: softwareupdate.inactiveupdates
-        i18n_header: softwareupdate.inactiveupdates
+        column: softwareupdate.managed_do_it_later_deferral_count
+        i18n_header: softwareupdate.managed_do_it_later_deferral_count
+        filter: ManagedDeferralCounterFilter 
     -
-        column: softwareupdate.catalogurl
-        i18n_header: softwareupdate.catalogurl
+        column: softwareupdate.maximum_managed_do_it_later_deferral_count
+        i18n_header: softwareupdate.maximum_managed_do_it_later_deferral_count
+    -
+        column: softwareupdate.managed_product_keys
+        i18n_header: softwareupdate.managed_product_keys
+    # -
+    #     column: softwareupdate.catalogurl
+    #     i18n_header: softwareupdate.catalogurl
