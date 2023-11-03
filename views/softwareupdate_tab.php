@@ -5,7 +5,7 @@
 
 <script>
 $(document).on('appReady', function(){
-	$.getJSON(appUrl + '/module/softwareupdate/get_tab_data/' + serialNumber, function(data){
+   $.getJSON(appUrl + '/module/softwareupdate/get_tab_data/' + serialNumber, function(data){
 
         // Set default badge to be blank
         $('#softwareupdate-cnt').text('')
@@ -39,10 +39,6 @@ $(document).on('appReady', function(){
                            var date = new Date(d[prop] * 1000);
                            rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span title="'+moment(date).fromNow()+'">'+moment(date).format('llll')+'</span></td></tr>';
 
-                        } else if((prop == "managed_do_it_later_user_notification_times" && d[prop] > 100) || (prop == "managed_do_it_later_user_notification_times" && d[prop] > 100) || (prop == "managed_do_it_later_user_notification_times" && d[prop] > 100)){
-                           var date = new Date(d[prop] * 1000);
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span title="'+moment(date).fromNow()+'">'+moment(date).format('llll')+'</span></td></tr>';
-
                         } else if((prop == "gatekeeper_disk_last_modified" && d[prop] > 100) || (prop == "gatekeeper_last_modified" && d[prop] > 100)){
                            var date = new Date(d[prop] * 1000);
                            rows_gatekeeper = rows_gatekeeper + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span title="'+moment(date).fromNow()+'">'+moment(date).format('llll')+'</span></td></tr>';
@@ -59,103 +55,25 @@ $(document).on('appReady', function(){
                            var date = new Date(d[prop] * 1000);
                            rows_mrt = rows_mrt + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span title="'+moment(date).fromNow()+'">'+moment(date).format('llll')+'</span></td></tr>';
 
-                        } else if(prop == 'automaticcheckenabled' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'automaticcheckenabled' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        } else if(prop == 'automaticcheckenabled' && d[prop] == -1){
-                        }
 
-                        else if(prop == 'automaticdownload' && d[prop] == 1){
+                        } else if((prop == 'automaticcheckenabled' || prop == 'automaticdownload' || prop == 'allow_prerelease_installation' || prop == 'configdatainstall' || prop == 'criticalupdateinstall' || prop == 'skiplocalcdn' || prop == 'skip_download_lack_space' || prop == 'eval_critical_if_unchanged' || prop == 'one_time_force_scan_enabled' || prop == 'auto_update' || prop == 'auto_update_restart_required' || prop == 'lastsessionsuccessful') && d[prop] == 1){
                            rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'automaticdownload' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        } else if(prop == 'automaticdownload' && d[prop] == -1){
-                        }
 
-                        else if(prop == 'allow_prerelease_installation' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'allow_prerelease_installation' && d[prop] == 0){
+                        } else if((prop == 'automaticcheckenabled' || prop == 'automaticdownload' || prop == 'allow_prerelease_installation' || prop == 'configdatainstall' || prop == 'criticalupdateinstall' || prop == 'skiplocalcdn' || prop == 'skip_download_lack_space' || prop == 'eval_critical_if_unchanged' || prop == 'one_time_force_scan_enabled' || prop == 'auto_update' || prop == 'auto_update_restart_required' || prop == 'lastsessionsuccessful') && d[prop] == 0){
                            rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        } else if(prop == 'allow_prerelease_installation' && d[prop] == -1){
-                        }
 
-                        else if(prop == 'build_is_seed' && d[prop] == 1){
+                        } else if((prop == 'automaticcheckenabled' || prop == 'automaticdownload' || prop == 'allow_prerelease_installation' || prop == 'configdatainstall' || prop == 'criticalupdateinstall' || prop == 'skiplocalcdn' || prop == 'skip_download_lack_space' || prop == 'eval_critical_if_unchanged' || prop == 'one_time_force_scan_enabled' || prop == 'auto_update' || prop == 'auto_update_restart_required' || prop == 'lastsessionsuccessful') && d[prop] == -1){
+                           // Do nothing for -1 values because they're empty
+                           rows = rows
+
+                        } else if((prop == 'build_is_seed' || prop == 'disable_seed_opt_out' || prop == 'show_feedback_menu') && d[prop] == 1){
                            rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'build_is_seed' && d[prop] == 0){
+                        } else if((prop == 'build_is_seed' || prop == 'disable_seed_opt_out' || prop == 'show_feedback_menu') && d[prop] == 0){
                            rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'disable_seed_opt_out' && d[prop] == 1){
-                           rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'disable_seed_opt_out' && d[prop] == 0){
-                           rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'show_feedback_menu' && d[prop] == 1){
-                           rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'show_feedback_menu' && d[prop] == 0){
-                           rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'configdatainstall' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'configdatainstall' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        } else if(prop == 'configdatainstall' && d[prop] == -1){
-                        }
-
-                        else if(prop == 'criticalupdateinstall' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'criticalupdateinstall' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        } else if(prop == 'criticalupdateinstall' && d[prop] == -1){
-                        }
-
-                        else if(prop == 'skiplocalcdn' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'skiplocalcdn' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'skip_download_lack_space' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'skip_download_lack_space' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'eval_critical_if_unchanged' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'eval_critical_if_unchanged' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'one_time_force_scan_enabled' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'one_time_force_scan_enabled' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'auto_update' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'auto_update' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
-                        }
-
-                        else if(prop == 'auto_update_restart_required' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'auto_update_restart_required' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
 
                         } else if(prop == 'lastrecommendedupdatesavailable'){
                            $('#softwareupdate-cnt').text(d[prop])
-                            
                            rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
-
-                        } else if(prop == 'lastsessionsuccessful' && d[prop] == 1){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        } else if(prop == 'lastsessionsuccessful' && d[prop] == 0){
-                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
 
                         } else if(prop == 'program_seed' && d[prop] == 0){
                            rows_seed = rows_seed + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td><span class="label label-success">'+i18n.t('softwareupdate.unenrolled')+'</span></td></tr>';
@@ -194,6 +112,8 @@ $(document).on('appReady', function(){
                             })
                             rows_history = rows_history // Close softwareupdate history table framework
 
+                        } else if(prop == "ddm_info"){
+                           rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+d[prop].replaceAll("\n", "<br>")+'</td></tr>';
 
                         } else {
                             rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
@@ -212,7 +132,7 @@ $(document).on('appReady', function(){
 
                 if (rows_xprotect != ''){
                     $('#softwareupdate-tab')
-                        // Write out xprotect table        
+                        // Write out xprotect table
                         .append($('<h4>')
                             .append($('<i>')
                                 .addClass('fa fa-shield'))
@@ -295,6 +215,6 @@ $(document).on('appReady', function(){
                 }
             })
         }
-	});
+   });
 });
 </script>

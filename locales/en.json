@@ -66,6 +66,7 @@
     "xprotect_payloads_version": "XProtect Payloads Version",
     "xprotect_payloads_last_modified": "XProtect Payloads Installed",
     "allow_prerelease_installation": "Allow Prerelease Installations",
+    "ddm_info": "DDM Declarations",
     "updates": "Updates",
     "update": "Update",
     "managed_do_it_later_deferral_count": "Managed Deferral Count",

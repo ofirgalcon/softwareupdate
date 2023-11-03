@@ -274,6 +274,31 @@ def get_seedutil():
 
     return seedutil
 
+def get_ddm_info():
+    # Get information about macOS 14+ Declarative Device Management (DDM) software updates
+    result = {}
+
+    if os.path.isfile("/private/var/db/softwareupdate/SoftwareUpdateDDMStatePersistence.plist"):
+        plist = FoundationPlist.readPlist("/private/var/db/softwareupdate/SoftwareUpdateDDMStatePersistence.plist")
+
+        if plist["SUCorePersistedStatePolicyFields"] and plist["SUCorePersistedStatePolicyFields"]["Declarations"]:
+            key_index = 1
+            ddm_info = ""
+            for declaration in plist["SUCorePersistedStatePolicyFields"]["Declarations"]:
+                try:
+                    target_version = plist["SUCorePersistedStatePolicyFields"]["Declarations"][declaration]["TargetOSVersion"]
+                    target_time = plist["SUCorePersistedStatePolicyFields"]["Declarations"][declaration]["TargetLocalDateTime"].replace("T"," ")
+
+                    ddm_info = ddm_info + ("Declaration "+str(key_index)+": macOS "+target_version+" install by "+target_time+"\n")
+
+                    key_index+= 1
+                except:
+                    pass
+
+            result.update({'ddm_info': ddm_info.strip()})
+
+    return result
+
 def getDarwinVersion():
     """Returns the Darwin version."""
     # Catalina -> 10.15.7 -> 19.6.0 -> 19
@@ -312,11 +337,6 @@ def get_pref_value(key, domain):
     else:
         return ""
 
-def merge_two_dicts(x, y):
-    z = x.copy()
-    z.update(y)
-    return z
-
 def main():
     """Main"""
 
@@ -327,14 +347,16 @@ def main():
     # Get results
     result = dict()
 
-    result = merge_two_dicts(get_software_update(), get_xprotect())
-    result = merge_two_dicts(result, get_softwareupdate_history())
-    result = merge_two_dicts(result, get_gatekeeper())
-    result = merge_two_dicts(result, get_gatekeeper_disk())
-    result = merge_two_dicts(result, get_kext_exclude())
-    result = merge_two_dicts(result, get_mrt())
-    result = merge_two_dicts(result, get_seedutil())
-    result = merge_two_dicts(result, get_xprotect_payloads())
+    result.update(get_xprotect())
+    result.update(get_software_update())
+    result.update(get_softwareupdate_history())
+    result.update(get_gatekeeper())
+    result.update(get_gatekeeper_disk())
+    result.update(get_kext_exclude())
+    result.update(get_mrt())
+    result.update(get_seedutil())
+    result.update(get_xprotect_payloads())
+    result.update(get_ddm_info())
 
     # Write softwareupdate results to cache file
     cachedir = '%s/cache' % os.path.dirname(os.path.realpath(__file__))

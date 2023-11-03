@@ -56,3 +56,4 @@ Table Schema
 * managed_do_it_later_user_notification_times - varchar(255) - managed user deferral times
 * managed_product_keys - varchar(255) - managed updates product keys
 * maximum_managed_do_it_later_deferral_count - int - maximum managed defarrals
+* ddm_info - text - string containing information about Declarative Device Management (DDM) declarations, macOS 14+ only

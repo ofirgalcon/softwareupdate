@@ -36,6 +36,12 @@ var format_softwareupdate_updates_available = function(colNumber, row){
     col.html(colvar)
 }
 
+var format_softwareupdate_ddm_info = function(colNumber, row){
+    var col = $('td:eq('+colNumber+')', row),
+        colvar = col.text();
+    col.text(colvar.replaceAll("\n", ", "))
+}
+
 // Filters
 var ManagedDeferralCounterFilter = function(colNumber, d){
     
