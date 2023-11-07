@@ -5,6 +5,7 @@ import os
 import sys
 import platform
 import time
+import json
 
 sys.path.insert(0, '/usr/local/munki')
 sys.path.insert(0, '/usr/local/munkireport')
@@ -298,6 +299,59 @@ def get_ddm_info():
 
     return result
 
+def get_deferred_updates():
+    # Get information about deferred and available OS updates
+    cmd = ['/usr/libexec/mdmclient', 'AvailableOSUpdates']
+    proc = subprocess.Popen(cmd, shell=False, bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (output, unused_error) = proc.communicate()
+
+    deferred_updates_out = []
+    deferred_updates = output.decode("utf-8", errors="ignore").split("Available updates (install debug profile for more details): ")[0]
+
+    # Process the text data
+    for update in deferred_updates.split('=== OS Update Item ==='):
+        update_out = {'deferred': 0, 'minor_os_update': 0, 'major_os_update': 0, 'security_response_update': 0, 'product_key': "", 'build': "", 'deferred_until': "", 'download_size': "", 'name': "", 'version': ""}
+        for item in update.split('\n'):
+            if 'Product Key:' in item:
+                update_out["product_key"] = item.replace("Product Key:", "").strip()
+            elif 'Deferred:' in item:
+                update_out["deferred"] = to_bool(item.replace("Deferred:", "").strip().split('  (Date: ')[0].strip())
+            elif 'MacOSUpdate:' in item:
+                update_out["minor_os_update"] = to_bool(item.replace("MacOSUpdate:", "").strip())
+
+        if update_out["product_key"] != "":
+            deferred_updates_out.append(update_out)
+
+    deferred_updates_two = output.decode("utf-8", errors="ignore").split("Available updates (install debug profile for more details): ")[1].strip()
+
+    update_index = 0
+    # Process the text data
+    for update in deferred_updates_two.split('    },'):
+        for item in update.split('\n'):
+
+            update_out = deferred_updates_out[update_index]
+
+            if "Build = " in item:
+                update_out['build'] = item.replace("Build = ", "").replace(";", "").replace('"', "").strip()
+            elif "DeferredUntil = " in item and deferred_updates_out[update_index]["deferred"] == 1:
+                update_out['deferred_until'] = string_to_time(item.replace("DeferredUntil = ", "").replace(";", "").replace('"', "").strip())
+            elif "DownloadSize = " in item:
+                update_out['download_size'] = item.replace("DownloadSize = ", "").replace(";", "").replace('"', "").strip()
+            elif "HumanReadableName = " in item:
+                update_out['name'] = item.replace("HumanReadableName = ", "").replace(";", "").replace('"', "").strip()
+            elif "IsMajorOSUpdate = " in item:
+                update_out['major_os_update'] = to_bool(item.replace("IsMajorOSUpdate = ", "").replace(";", "").replace('"', "").strip())
+            elif "IsSecurityResponse = " in item:
+                update_out['security_response_update'] = to_bool(item.replace("IsSecurityResponse = ", "").replace(";", "").replace('"', "").strip())
+            elif "Version = " in item:
+                update_out['version'] = item.replace("Version = ", "").replace(";", "").replace('"', "").strip()
+
+        update_index += 1
+
+    result = {'deferred_updates': json.dumps(deferred_updates_out)}
+
+    return result
+
 def getDarwinVersion():
     """Returns the Darwin version."""
     # Catalina -> 10.15.7 -> 19.6.0 -> 19
@@ -307,7 +361,7 @@ def getDarwinVersion():
 def to_bool(s):
     if s == "":
         return ""
-    elif s == True:
+    elif s == True or s == "YES" or s == "Yes" or s == "yes" or s == "1":
         return 1
     else:
         return 0
@@ -356,6 +410,13 @@ def main():
     result.update(get_seedutil())
     result.update(get_xprotect_payloads())
     result.update(get_ddm_info())
+
+    # If greater than macOS 11 (Darwin 20), collect deferred macOS updates
+    if getDarwinVersion() > 20:
+        try:
+            result.update(get_deferred_updates())
+        except:
+            pass
 
     # Write softwareupdate results to cache file
     cachedir = '%s/cache' % os.path.dirname(os.path.realpath(__file__))

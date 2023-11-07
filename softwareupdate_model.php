@@ -56,5 +56,6 @@ class Softwareupdate_model extends Eloquent
       'managed_product_keys',
       'maximum_managed_do_it_later_deferral_count',
       'ddm_info',
+      'deferred_updates',
     ];
 }

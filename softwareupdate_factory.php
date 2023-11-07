@@ -53,5 +53,6 @@ $factory->define(Softwareupdate_model::class, function (Faker\Generator $faker) 
         'managed_product_keys' => $faker->word(),
         'maximum_managed_do_it_later_deferral_count' => $faker->numberBetween(7, 10),
         'ddm_info' => $faker->word(),
+        'deferred_updates' => $faker->word(),
     ];
 });

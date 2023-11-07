@@ -23,6 +23,7 @@ $(document).on('appReady', function(){
 
                 // Generate rows from data
                 var rows = ''
+                var rows_details = ''
                 var rows_seed = ''
                 var rows_mrt = ''
                 var rows_kext = ''
@@ -115,6 +116,27 @@ $(document).on('appReady', function(){
                         } else if(prop == "ddm_info"){
                            rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+d[prop].replaceAll("\n", "<br>")+'</td></tr>';
 
+                        } else if(prop == "deferred_updates"){
+                            // Build out the software update details table
+
+                            var softwareupdate_detail_data = JSON.parse(d['deferred_updates']);
+                            rows_details = '<tr><th>'+i18n.t('softwareupdate.name')+'</th><th>'+i18n.t('softwareupdate.version')+'</th><th>'+i18n.t('softwareupdate.build')+'</th><th>'+i18n.t('softwareupdate.deferred')+'</th><th>'+i18n.t('softwareupdate.deferred_until')+'</th><th>'+i18n.t('softwareupdate.major_os_update')+'</th><th>'+i18n.t('softwareupdate.minor_os_update')+'</th><th>'+i18n.t('softwareupdate.download_size')+'</th><th>'+i18n.t('softwareupdate.product_key')+'</th></tr>'
+                            $.each(softwareupdate_detail_data, function(i,d){
+                                if (typeof d['name'] !== "undefined") {var name = d['name']} else {var name = ""}
+                                if (typeof d['version'] !== "undefined") {var version = d['version']} else {var version = ""}
+                                if (typeof d['build'] !== "undefined") {var build = d['build']} else {var build = ""}
+                                if (typeof d['deferred'] !== "undefined" && d['deferred'] == "1") {var deferred = i18n.t('yes')} else {var deferred = i18n.t('no')}
+                                if (typeof d['deferred_until'] !== "undefined" && d['deferred'] !== "" && d['deferred'] > 0) {var date_1 = new Date(d['deferred_until'] * 1000); date = '<span title="'+moment(date_1).fromNow()+'">'+moment(date_1).format('llll')} else {var date = ""}
+                                if (typeof d['major_os_update'] !== "undefined" && d['major_os_update'] == "1") {var major_os_update = i18n.t('yes')} else {var major_os_update = i18n.t('no')}
+                                if (typeof d['minor_os_update'] !== "undefined" && d['minor_os_update'] == "1") {var minor_os_update = i18n.t('yes')} else {var minor_os_update = i18n.t('no')}
+                                if (typeof d['security_response_update'] !== "undefined" && d['security_response_update'] == "1") {var security_response_update = i18n.t('yes')} else {var security_response_update = i18n.t('no')}
+                                if (typeof d['download_size'] !== "undefined") {var download_size = fileSize(d['download_size'], 2)} else {var download_size = ""}
+                                if (typeof d['product_key'] !== "undefined") {var product_key = d['product_key']} else {var product_key = ""}
+                                
+                                // Generate rows from data
+                                rows_details = rows_details + '<tr><td style="min-width:200px;">'+name+'</td><td style="min-width:75px;">'+version+'</td><td style="min-width:75px;">'+build+'</td><td style="min-width:75px;">'+deferred+'</td><td style="min-width:200px;">'+date+'</td><td style="min-width:130px;">'+major_os_update+'</td><td style="min-width:130px;">'+minor_os_update+'</td><td style="min-width:100px;">'+download_size+'</td><td style="min-width:100px;">'+product_key+'</td></tr>';
+                            })
+
                         } else {
                             rows = rows + '<tr><th>'+i18n.t('softwareupdate.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
                         }
@@ -129,6 +151,20 @@ $(document).on('appReady', function(){
                             .addClass('table table-striped table-condensed')
                             .append($('<tbody>')
                                 .append(rows))))
+
+                if (rows_details != '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>' && rows_details != ""){
+                    $('#softwareupdate-tab')
+                        // Write out software update details table
+                        .append($('<h4>')
+                            .append($('<i>')
+                                .addClass('fa fa-info-circle'))
+                            .append(' '+i18n.t('softwareupdate.deferred_updates')))
+                        .append($('<div style="max-width:1000px;">')
+                            .append($('<table>')
+                                .addClass('table table-striped table-condensed')
+                                .append($('<tbody>')
+                                    .append(rows_details))))
+                }
 
                 if (rows_xprotect != ''){
                     $('#softwareupdate-tab')

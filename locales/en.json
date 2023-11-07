@@ -71,5 +71,16 @@
     "update": "Update",
     "managed_do_it_later_deferral_count": "Managed Deferral Count",
     "managed_product_keys": "Managed Product Keys",
-    "maximum_managed_do_it_later_deferral_count": "Managed Max Deferrals"
+    "maximum_managed_do_it_later_deferral_count": "Managed Max Deferrals",
+    "deferred_updates": "Available Software Updates",
+    "deferred": "Deferred",
+    "minor_os_update": "Minor OS Update",
+    "major_os_update": "Major OS Update",
+    "security_response_update": "Security Response Update",
+    "product_key": "Product Key",
+    "build": "Build",
+    "deferred_until": "Date Deferred Until",
+    "download_size": "Size",
+    "name": "Name",
+    "version": "Version"
 }
