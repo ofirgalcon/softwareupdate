@@ -1,0 +1,13 @@
+type: button
+widget_id: su_allow_rsr_removal-widget
+api_url: /module/softwareupdate/get_binary_widget/allow_rapid_security_response_removal
+i18n_title: softwareupdate.allow_rapid_security_response_removal_widget
+icon: fa-life-ring
+listing_link: /show/listing/softwareupdate/softwareupdate
+buttons:
+  - label: 1
+    i18n_label: yes
+    class: btn-danger 
+  - label: 0
+    i18n_label: no
+    class: btn-success

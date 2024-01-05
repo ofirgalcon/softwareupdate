@@ -13,7 +13,7 @@ class Softwareupdate_controller extends Module_controller
         // Store module path
         $this->module_path = dirname(__FILE__);
     }
-	
+
     /**
      * Get softwareupdate information for serial_number
      *
@@ -22,7 +22,7 @@ class Softwareupdate_controller extends Module_controller
     public function get_tab_data($serial_number = '')
     {
         jsonView([
-            Softwareupdate_model::select('softwareupdate.automaticcheckenabled', 'softwareupdate.automaticdownload', 'softwareupdate.configdatainstall', 'softwareupdate.criticalupdateinstall', 'softwareupdate.auto_update', 'softwareupdate.auto_update_restart_required', 'softwareupdate.allow_prerelease_installation', 'softwareupdate.lastattemptsystemversion', 'softwareupdate.lastbackgroundsuccessfuldate', 'softwareupdate.lastfullsuccessfuldate', 'softwareupdate.lastsuccessfuldate', 'softwareupdate.lastresultcode', 'softwareupdate.lastsessionsuccessful', 'softwareupdate.lastupdatesavailable', 'softwareupdate.lastrecommendedupdatesavailable', 'softwareupdate.recommendedupdates', 'softwareupdate.inactiveupdates', 'softwareupdate.catalogurl', 'softwareupdate.skiplocalcdn', 'softwareupdate.skip_download_lack_space', 'softwareupdate.eval_critical_if_unchanged', 'softwareupdate.one_time_force_scan_enabled', 'softwareupdate.managed_do_it_later_deferral_count', 'softwareupdate.managed_product_keys', 'softwareupdate.maximum_managed_do_it_later_deferral_count', 'softwareupdate.ddm_info', 'softwareupdate.deferred_updates', 'softwareupdate.xprotect_version', 'softwareupdate.mrxprotect',  'softwareupdate.xprotect_payloads_version', 'softwareupdate.xprotect_payloads_last_modified', 'softwareupdate.gatekeeper_version', 'softwareupdate.gatekeeper_last_modified', 'softwareupdate.gatekeeper_disk_version', 'softwareupdate.gatekeeper_disk_last_modified', 'softwareupdate.kext_exclude_version', 'softwareupdate.kext_exclude_last_modified', 'softwareupdate.mrt_version', 'softwareupdate.mrt_last_modified', 'softwareupdate.program_seed', 'softwareupdate.enrolled_seed', 'softwareupdate.catalog_url_seed', 'softwareupdate.softwareupdate_history')
+            Softwareupdate_model::select('softwareupdate.automaticcheckenabled', 'softwareupdate.automaticdownload', 'softwareupdate.configdatainstall', 'softwareupdate.criticalupdateinstall', 'softwareupdate.auto_update', 'softwareupdate.auto_update_restart_required', 'softwareupdate.allow_prerelease_installation', 'softwareupdate.lastattemptsystemversion', 'softwareupdate.lastbackgroundsuccessfuldate', 'softwareupdate.lastfullsuccessfuldate', 'softwareupdate.lastsuccessfuldate', 'softwareupdate.lastresultcode', 'softwareupdate.lastsessionsuccessful', 'softwareupdate.lastupdatesavailable', 'softwareupdate.lastrecommendedupdatesavailable', 'softwareupdate.recommendedupdates', 'softwareupdate.inactiveupdates', 'softwareupdate.catalogurl', 'softwareupdate.skiplocalcdn', 'softwareupdate.skip_download_lack_space', 'softwareupdate.eval_critical_if_unchanged', 'softwareupdate.one_time_force_scan_enabled', 'softwareupdate.managed_do_it_later_deferral_count', 'softwareupdate.managed_product_keys', 'softwareupdate.maximum_managed_do_it_later_deferral_count', 'softwareupdate.force_delayed_minor_updates', 'softwareupdate.minor_deferred_delay', 'softwareupdate.force_delayed_major_updates', 'softwareupdate.major_deferred_delay', 'softwareupdate.allow_rapid_security_response_installation', 'softwareupdate.allow_rapid_security_response_removal', 'softwareupdate.ddm_info', 'softwareupdate.deferred_updates', 'softwareupdate.xprotect_version', 'softwareupdate.mrxprotect',  'softwareupdate.xprotect_payloads_version', 'softwareupdate.xprotect_payloads_last_modified', 'softwareupdate.gatekeeper_version', 'softwareupdate.gatekeeper_last_modified', 'softwareupdate.gatekeeper_disk_version', 'softwareupdate.gatekeeper_disk_last_modified', 'softwareupdate.kext_exclude_version', 'softwareupdate.kext_exclude_last_modified', 'softwareupdate.mrt_version', 'softwareupdate.mrt_last_modified', 'softwareupdate.program_seed', 'softwareupdate.enrolled_seed', 'softwareupdate.catalog_url_seed', 'softwareupdate.softwareupdate_history')
             ->whereSerialNumber($serial_number)
             ->filter()
             ->limit(1)
@@ -80,9 +80,9 @@ class Softwareupdate_controller extends Module_controller
 
         $out = [];
         foreach($update_count as $label => $value){
-                $out[] = ['label' => $label, 'count' => $value];
+            $out[] = ['label' => $label, 'count' => $value];
         }
-        
-        jsonView($out);        
+
+        jsonView($out);
     }
 } 

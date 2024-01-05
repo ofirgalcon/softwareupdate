@@ -14,12 +14,12 @@ class SoftwareupdateDeferredUpdates extends Migration
             $table->text('deferred_updates')->nullable();
         });
     }
-    
+
     public function down()
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->dropColumn('deferred_updates');        
+            $table->dropColumn('deferred_updates');
         });
     }
 }

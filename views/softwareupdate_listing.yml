@@ -69,6 +69,22 @@ table:
         column: softwareupdate.mrt_version
         i18n_header: softwareupdate.mrt_version
     -
+        column: softwareupdate.force_delayed_minor_updates
+        i18n_header: softwareupdate.force_delayed_minor_updates
+        formatter: format_softwareupdate_yes_no
+    -
+        column: softwareupdate.force_delayed_major_updates
+        i18n_header: softwareupdate.force_delayed_major_updates
+        formatter: format_softwareupdate_yes_no
+    -
+        column: softwareupdate.allow_rapid_security_response_installation
+        i18n_header: softwareupdate.allow_rapid_security_response_installation
+        formatter: format_softwareupdate_yes_no_rev
+    -
+        column: softwareupdate.allow_rapid_security_response_removal
+        i18n_header: softwareupdate.allow_rapid_security_response_removal
+        formatter: format_softwareupdate_yes_no 
+    -
         column: softwareupdate.managed_do_it_later_deferral_count
         i18n_header: softwareupdate.managed_do_it_later_deferral_count
         filter: ManagedDeferralCounterFilter

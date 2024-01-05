@@ -14,12 +14,12 @@ class SoftwareupdateDdmColumn extends Migration
             $table->text('ddm_info')->nullable();
         });
     }
-    
+
     public function down()
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->dropColumn('ddm_info');        
+            $table->dropColumn('ddm_info');
         });
     }
 }

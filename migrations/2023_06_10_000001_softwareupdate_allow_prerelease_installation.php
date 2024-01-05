@@ -12,16 +12,16 @@ class SoftwareupdateAllowPrereleaseInstallation extends Migration
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
             $table->boolean('allow_prerelease_installation')->nullable();
-            
+
             $table->index('allow_prerelease_installation');
         });
     }
-    
+
     public function down()
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->dropColumn('allow_prerelease_installation');        
+            $table->dropColumn('allow_prerelease_installation');
         });
     }
 }

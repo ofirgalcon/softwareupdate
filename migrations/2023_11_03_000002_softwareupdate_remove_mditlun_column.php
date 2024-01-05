@@ -11,10 +11,10 @@ class SoftwareupdateRemoveMditlunColumn extends Migration
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->dropColumn('managed_do_it_later_user_notification_times');        
+            $table->dropColumn('managed_do_it_later_user_notification_times');
         });
     }
-    
+
     public function down()
     {
         $capsule = new Capsule();

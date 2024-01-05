@@ -54,5 +54,11 @@ $factory->define(Softwareupdate_model::class, function (Faker\Generator $faker) 
         'maximum_managed_do_it_later_deferral_count' => $faker->numberBetween(7, 10),
         'ddm_info' => $faker->word(),
         'deferred_updates' => $faker->word(),
+        'force_delayed_minor_updates' => $faker->boolean(),
+        'force_delayed_major_updates' => $faker->boolean(),
+        'minor_deferred_delay' => $faker->numberBetween(1, 90),
+        'major_deferred_delay' => $faker->numberBetween(1, 90),
+        'allow_rapid_security_response_installation' => $faker->boolean(),
+        'allow_rapid_security_response_removal' => $faker->boolean(),
     ];
 });

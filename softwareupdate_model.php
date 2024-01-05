@@ -57,5 +57,11 @@ class Softwareupdate_model extends Eloquent
       'maximum_managed_do_it_later_deferral_count',
       'ddm_info',
       'deferred_updates',
+      'force_delayed_minor_updates',
+      'force_delayed_major_updates',
+      'minor_deferred_delay',
+      'major_deferred_delay',
+      'allow_rapid_security_response_installation',
+      'allow_rapid_security_response_removal',
     ];
 }

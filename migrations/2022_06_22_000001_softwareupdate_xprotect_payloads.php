@@ -13,17 +13,17 @@ class SoftwareupdateXprotectPayloads extends Migration
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
             $table->string('xprotect_payloads_version')->nullable();
             $table->bigInteger('xprotect_payloads_last_modified')->nullable();
-            
+
             $table->index('xprotect_payloads_version');
         });
     }
-    
+
     public function down()
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
             $table->dropColumn('xprotect_payloads_version');
-            $table->dropColumn('xprotect_payloads_last_modified');       
+            $table->dropColumn('xprotect_payloads_last_modified');
         });
     }
 }

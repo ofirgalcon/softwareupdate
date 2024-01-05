@@ -57,3 +57,9 @@ Table Schema
 * maximum_managed_do_it_later_deferral_count - int - maximum managed deferrals
 * ddm_info - text - string containing information about Declarative Device Management (DDM) declarations, macOS 14+ only
 * deferred_updates - text - string containing JSON detailing deferred macOS updates, macOS 12+ only
+* force_delayed_minor_updates - boolean - Should minor macOS updates be deferred
+* force_delayed_major_updates - boolean - Should major macOS updates be deferred
+* minor_deferred_delay - int - Count of days to defer minor macOS updates
+* major_deferred_delay - int - Count of days to defer major macOS updates
+* allow_rapid_security_response_installation - boolean - Allow RSR updates to be installed
+* allow_rapid_security_response_removal - boolean - Allow RSR updates to be removed

@@ -32,7 +32,7 @@ class SoftwareupdateRewriteColumns extends Migration
             $table->string('disable_seed_opt_out')->nullable();
             $table->string('catalog_url_seed')->nullable();
             $table->mediumText('softwareupdate_history')->nullable();
-            
+
             $table->index('skip_download_lack_space');
             $table->index('eval_critical_if_unchanged');
             $table->index('one_time_force_scan_enabled');
@@ -51,7 +51,7 @@ class SoftwareupdateRewriteColumns extends Migration
             $table->index('catalog_url_seed');
         });
     }
-    
+
     public function down()
     {
         $capsule = new Capsule();
@@ -75,8 +75,8 @@ class SoftwareupdateRewriteColumns extends Migration
             $table->dropColumn('build_is_seed');
             $table->dropColumn('show_feedback_menu');
             $table->dropColumn('disable_seed_opt_out');
-            $table->dropColumn('catalog_url_seed');          
-            $table->dropColumn('softwareupdate_history');          
+            $table->dropColumn('catalog_url_seed');
+            $table->dropColumn('softwareupdate_history');
         });
     }
 }

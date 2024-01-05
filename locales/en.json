@@ -82,5 +82,13 @@
     "deferred_until": "Date Deferred Until",
     "download_size": "Size",
     "name": "Name",
+    "force_delayed_minor_updates": "Defer Minor Updates",
+    "force_delayed_major_updates": "Defer Major Updates",
+    "minor_deferred_delay": "Minor Update Deferral Days",
+    "major_deferred_delay": "Major Update Deferral Days",
+    "allow_rapid_security_response_installation": "Allow RSR Installation",
+    "allow_rapid_security_response_installation_widget": "Allow Rapid Security Response Installation",
+    "allow_rapid_security_response_removal": "Allow RSR Removal",
+    "allow_rapid_security_response_removal_widget": "Allow Rapid Security Response Removal",
     "version": "Version"
 }

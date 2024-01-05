@@ -14,15 +14,15 @@ from munkilib import FoundationPlist
 from Foundation import CFPreferencesCopyAppValue
 
 def get_software_update():
-    
-    # Read in com.apple.SoftwareUpdate and com.apple.commerce domains for processing 
+
+    # Read in com.apple.SoftwareUpdate, com.apple.commerce, and com.apple.applicationaccess domains for processing 
     softwareupdate = {}
     softwareupdate['skip_download_lack_space'] = to_bool(get_pref_value('DidSkipBackgroundDownloadLackingDiskSpace', 'com.apple.SoftwareUpdate'))
     softwareupdate['eval_critical_if_unchanged'] = to_bool(get_pref_value('EvaluateCriticalEvenIfUnchanged', 'com.apple.SoftwareUpdate'))
     softwareupdate['lastattemptsystemversion'] = get_pref_value('LastAttemptSystemVersion', 'com.apple.SoftwareUpdate')
-    softwareupdate['lastbackgroundsuccessfuldate'] = string_to_time(get_pref_value('LastBackgroundSuccessfulDate', 'com.apple.SoftwareUpdate')) 
+    softwareupdate['lastbackgroundsuccessfuldate'] = string_to_time(get_pref_value('LastBackgroundSuccessfulDate', 'com.apple.SoftwareUpdate'))
     softwareupdate['lastfullsuccessfuldate'] = string_to_time(get_pref_value('LastFullSuccessfulDate', 'com.apple.SoftwareUpdate'))
-    softwareupdate['lastrecommendedupdatesavailable'] = get_pref_value('LastRecommendedUpdatesAvailable', 'com.apple.SoftwareUpdate') 
+    softwareupdate['lastrecommendedupdatesavailable'] = get_pref_value('LastRecommendedUpdatesAvailable', 'com.apple.SoftwareUpdate')
     softwareupdate['lastresultcode'] = get_pref_value('LastResultCode', 'com.apple.SoftwareUpdate')
     softwareupdate['lastsessionsuccessful'] = to_bool(get_pref_value('LastSessionSuccessful', 'com.apple.SoftwareUpdate'))
     softwareupdate['lastsuccessfuldate'] = string_to_time(get_pref_value('LastSuccessfulDate', 'com.apple.SoftwareUpdate'))
@@ -41,11 +41,33 @@ def get_software_update():
     softwareupdate['managed_do_it_later_deferral_count'] = get_pref_value('ManagedDoItLaterDeferralCount', 'com.apple.SoftwareUpdate')
     softwareupdate['managed_product_keys'] = get_pref_value('ManagedProductKeys', 'com.apple.SoftwareUpdate')
     softwareupdate['maximum_managed_do_it_later_deferral_count'] = get_pref_value('MaximumManagedDoItLaterDeferralCount', 'com.apple.SoftwareUpdate')
+    softwareupdate['force_delayed_minor_updates'] = to_bool(get_pref_value('forceDelayedSoftwareUpdates', 'com.apple.applicationaccess'))
+    softwareupdate['force_delayed_major_updates'] = to_bool(get_pref_value('forceDelayedMajorSoftwareUpdates', 'com.apple.applicationaccess'))
+    softwareupdate['minor_deferred_delay'] = get_pref_value('enforcedSoftwareUpdateMinorOSDeferredInstallDelay', 'com.apple.applicationaccess')
+    softwareupdate['major_deferred_delay'] = get_pref_value('enforcedSoftwareUpdateMajorOSDeferredInstallDelay', 'com.apple.applicationaccess')
+    softwareupdate['allow_rapid_security_response_installation'] = to_bool(get_pref_value('allowRapidSecurityResponseInstallation', 'com.apple.applicationaccess'))
+    softwareupdate['allow_rapid_security_response_removal'] = to_bool(get_pref_value('allowRapidSecurityResponseRemoval', 'com.apple.applicationaccess'))
 
     # If greater than macOS 13 (Darwin 22), default this key if blank
     softwareupdate['allow_prerelease_installation'] = to_bool(get_pref_value('AllowPreReleaseInstallation', 'com.apple.SoftwareUpdate'))
     if getDarwinVersion() > 21 and softwareupdate['allow_prerelease_installation'] == "":
         softwareupdate['allow_prerelease_installation'] = 1
+
+    # Use the old enforcedSoftwareUpdateDelay key if enforcedSoftwareUpdateMinorOSDeferredInstallDelay is blank/unset
+    if 'minor_deferred_delay' in softwareupdate and softwareupdate['minor_deferred_delay'] == "":
+        softwareupdate['minor_deferred_delay'] = get_pref_value('enforcedSoftwareUpdateDelay', 'com.apple.applicationaccess')
+
+    # Set key defaults, for macOS 13 (Darwin 22)
+    if getDarwinVersion() > 21 and softwareupdate['allow_rapid_security_response_installation'] == "":
+        softwareupdate['allow_rapid_security_response_installation'] = 1
+    if getDarwinVersion() > 21 and softwareupdate['allow_rapid_security_response_removal'] == "":
+        softwareupdate['allow_rapid_security_response_removal'] = 1
+
+    # Set key defaults, for macOS 11 (Darwin 20)
+    if getDarwinVersion() > 19 and softwareupdate['force_delayed_minor_updates'] == "":
+        softwareupdate['force_delayed_minor_updates'] = 0
+    if getDarwinVersion() > 19 and softwareupdate['force_delayed_major_updates'] == "":
+        softwareupdate['force_delayed_major_updates'] = 0
 
     return softwareupdate
 
@@ -132,7 +154,7 @@ def get_xprotect_payloads():
 
     return xprotect
 
-def get_gatekeeper():          
+def get_gatekeeper():
     # If less than 10.8 (Darwin 12), don't collect Gatekeeper data
     if getDarwinVersion() < 12:
         return {}
@@ -149,7 +171,7 @@ def get_gatekeeper():
     for item in out:
         if item == 'CFBundleShortVersionString':
             gatekeeper['gatekeeper_version'] = str(out[item])
-        
+
     stat = os.stat(gatekeeper_plist)
     gatekeeper['gatekeeper_last_modified'] = str(int(stat.st_mtime))
 
@@ -197,7 +219,7 @@ def get_kext_exclude():
 
     for item in out:
         if item == 'CFBundleShortVersionString':
-            kextexclude['kext_exclude_version'] = str(out[item])   
+            kextexclude['kext_exclude_version'] = str(out[item])
 
     stat = os.stat(info_path)
     kextexclude['kext_exclude_last_modified'] = str(int(stat.st_mtime))
