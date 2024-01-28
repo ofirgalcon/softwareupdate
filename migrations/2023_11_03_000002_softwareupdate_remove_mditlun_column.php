@@ -3,7 +3,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class SoftwareupdateXprotectPayloads extends Migration
+class SoftwareupdateRemoveMditlunColumn extends Migration
 {
     private $tableName = 'softwareupdate';
 
@@ -11,10 +11,7 @@ class SoftwareupdateXprotectPayloads extends Migration
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->string('xprotect_payloads_version')->nullable();
-            $table->bigInteger('xprotect_payloads_last_modified')->nullable();
-
-            $table->index('xprotect_payloads_version');
+            $table->dropColumn('managed_do_it_later_user_notification_times');
         });
     }
 
@@ -22,8 +19,7 @@ class SoftwareupdateXprotectPayloads extends Migration
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->dropColumn('xprotect_payloads_version');
-            $table->dropColumn('xprotect_payloads_last_modified');
+            $table->string('managed_do_it_later_user_notification_times')->nullable();
         });
     }
 }

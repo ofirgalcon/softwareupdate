@@ -1,0 +1,13 @@
+type: button
+widget_id: su_force_minor_deferred-widget
+api_url: /module/softwareupdate/get_binary_widget/force_delayed_minor_updates
+i18n_title: softwareupdate.force_delayed_minor_updates
+icon: fa-thumb-tack
+listing_link: /show/listing/softwareupdate/softwareupdate
+buttons:
+  - label: 1
+    i18n_label: yes
+    class: btn-info 
+  - label: 0
+    i18n_label: no
+    class: btn-success

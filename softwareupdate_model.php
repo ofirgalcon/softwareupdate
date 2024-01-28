@@ -51,5 +51,17 @@ class Softwareupdate_model extends Eloquent
       'softwareupdate_history',
       'xprotect_payloads_version',
       'xprotect_payloads_last_modified',
+      'allow_prerelease_installation',
+      'managed_do_it_later_deferral_count',
+      'managed_product_keys',
+      'maximum_managed_do_it_later_deferral_count',
+      'ddm_info',
+      'deferred_updates',
+      'force_delayed_minor_updates',
+      'force_delayed_major_updates',
+      'minor_deferred_delay',
+      'major_deferred_delay',
+      'allow_rapid_security_response_installation',
+      'allow_rapid_security_response_removal',
     ];
 }

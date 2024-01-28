@@ -3,7 +3,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class SoftwareupdateXprotectPayloads extends Migration
+class SoftwareupdateAllowPrereleaseInstallation extends Migration
 {
     private $tableName = 'softwareupdate';
 
@@ -11,10 +11,9 @@ class SoftwareupdateXprotectPayloads extends Migration
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->string('xprotect_payloads_version')->nullable();
-            $table->bigInteger('xprotect_payloads_last_modified')->nullable();
+            $table->boolean('allow_prerelease_installation')->nullable();
 
-            $table->index('xprotect_payloads_version');
+            $table->index('allow_prerelease_installation');
         });
     }
 
@@ -22,8 +21,7 @@ class SoftwareupdateXprotectPayloads extends Migration
     {
         $capsule = new Capsule();
         $capsule::schema()->table($this->tableName, function (Blueprint $table) {
-            $table->dropColumn('xprotect_payloads_version');
-            $table->dropColumn('xprotect_payloads_last_modified');
+            $table->dropColumn('allow_prerelease_installation');
         });
     }
 }

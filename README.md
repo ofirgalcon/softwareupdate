@@ -51,3 +51,15 @@ Table Schema
 * softwareupdate_history - medium text - JSON string containing history of all software updates
 * xprotect_payloads_version - varchar(255) - version of XProtect Payloads installed
 * xprotect_payloads_last_modified - big integer - when XProtect Payloads was last installed
+* allow_prerelease_installation - boolean - if beta versions of macOS are allowed to be installed
+* managed_do_it_later_deferral_count - int - managed user deferral count
+* managed_product_keys - varchar(255) - managed updates product keys
+* maximum_managed_do_it_later_deferral_count - int - maximum managed deferrals
+* ddm_info - text - string containing information about Declarative Device Management (DDM) declarations, macOS 14+ only
+* deferred_updates - text - string containing JSON detailing deferred macOS updates, macOS 12+ only
+* force_delayed_minor_updates - boolean - Should minor macOS updates be deferred
+* force_delayed_major_updates - boolean - Should major macOS updates be deferred
+* minor_deferred_delay - int - Count of days to defer minor macOS updates
+* major_deferred_delay - int - Count of days to defer major macOS updates
+* allow_rapid_security_response_installation - boolean - Allow RSR updates to be installed
+* allow_rapid_security_response_removal - boolean - Allow RSR updates to be removed

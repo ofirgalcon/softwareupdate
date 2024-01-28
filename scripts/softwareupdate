@@ -5,6 +5,7 @@ import os
 import sys
 import platform
 import time
+import json
 
 sys.path.insert(0, '/usr/local/munki')
 sys.path.insert(0, '/usr/local/munkireport')
@@ -13,15 +14,15 @@ from munkilib import FoundationPlist
 from Foundation import CFPreferencesCopyAppValue
 
 def get_software_update():
-    
-    # Read in com.apple.SoftwareUpdate and com.apple.commerce domains for processing 
-    softwareupdate = {}  
+
+    # Read in com.apple.SoftwareUpdate, com.apple.commerce, and com.apple.applicationaccess domains for processing 
+    softwareupdate = {}
     softwareupdate['skip_download_lack_space'] = to_bool(get_pref_value('DidSkipBackgroundDownloadLackingDiskSpace', 'com.apple.SoftwareUpdate'))
     softwareupdate['eval_critical_if_unchanged'] = to_bool(get_pref_value('EvaluateCriticalEvenIfUnchanged', 'com.apple.SoftwareUpdate'))
     softwareupdate['lastattemptsystemversion'] = get_pref_value('LastAttemptSystemVersion', 'com.apple.SoftwareUpdate')
-    softwareupdate['lastbackgroundsuccessfuldate'] = string_to_time(get_pref_value('LastBackgroundSuccessfulDate', 'com.apple.SoftwareUpdate')) 
+    softwareupdate['lastbackgroundsuccessfuldate'] = string_to_time(get_pref_value('LastBackgroundSuccessfulDate', 'com.apple.SoftwareUpdate'))
     softwareupdate['lastfullsuccessfuldate'] = string_to_time(get_pref_value('LastFullSuccessfulDate', 'com.apple.SoftwareUpdate'))
-    softwareupdate['lastrecommendedupdatesavailable'] = get_pref_value('LastRecommendedUpdatesAvailable', 'com.apple.SoftwareUpdate') 
+    softwareupdate['lastrecommendedupdatesavailable'] = get_pref_value('LastRecommendedUpdatesAvailable', 'com.apple.SoftwareUpdate')
     softwareupdate['lastresultcode'] = get_pref_value('LastResultCode', 'com.apple.SoftwareUpdate')
     softwareupdate['lastsessionsuccessful'] = to_bool(get_pref_value('LastSessionSuccessful', 'com.apple.SoftwareUpdate'))
     softwareupdate['lastsuccessfuldate'] = string_to_time(get_pref_value('LastSuccessfulDate', 'com.apple.SoftwareUpdate'))
@@ -34,10 +35,40 @@ def get_software_update():
     softwareupdate['automaticdownload'] = to_bool(get_pref_value('AutomaticDownload', 'com.apple.SoftwareUpdate'))
     softwareupdate['inactiveupdates'] = get_pref_value('InactiveUpdates', 'com.apple.SoftwareUpdate')
     softwareupdate['catalogurl'] = get_pref_value('CatalogURL', 'com.apple.SoftwareUpdate')
-    softwareupdate['AutomaticCheckEnabled'] = to_bool(get_pref_value('AutomaticCheckEnabled', 'com.apple.SoftwareUpdate'))
+    softwareupdate['automaticcheckenabled'] = to_bool(get_pref_value('AutomaticCheckEnabled', 'com.apple.SoftwareUpdate'))
     softwareupdate['auto_update'] = to_bool(get_pref_value('AutoUpdate', 'com.apple.commerce'))
     softwareupdate['auto_update_restart_required'] = to_bool(get_pref_value('AutoUpdateRestartRequired', 'com.apple.commerce'))
-            
+    softwareupdate['managed_do_it_later_deferral_count'] = get_pref_value('ManagedDoItLaterDeferralCount', 'com.apple.SoftwareUpdate')
+    softwareupdate['managed_product_keys'] = get_pref_value('ManagedProductKeys', 'com.apple.SoftwareUpdate')
+    softwareupdate['maximum_managed_do_it_later_deferral_count'] = get_pref_value('MaximumManagedDoItLaterDeferralCount', 'com.apple.SoftwareUpdate')
+    softwareupdate['force_delayed_minor_updates'] = to_bool(get_pref_value('forceDelayedSoftwareUpdates', 'com.apple.applicationaccess'))
+    softwareupdate['force_delayed_major_updates'] = to_bool(get_pref_value('forceDelayedMajorSoftwareUpdates', 'com.apple.applicationaccess'))
+    softwareupdate['minor_deferred_delay'] = get_pref_value('enforcedSoftwareUpdateMinorOSDeferredInstallDelay', 'com.apple.applicationaccess')
+    softwareupdate['major_deferred_delay'] = get_pref_value('enforcedSoftwareUpdateMajorOSDeferredInstallDelay', 'com.apple.applicationaccess')
+    softwareupdate['allow_rapid_security_response_installation'] = to_bool(get_pref_value('allowRapidSecurityResponseInstallation', 'com.apple.applicationaccess'))
+    softwareupdate['allow_rapid_security_response_removal'] = to_bool(get_pref_value('allowRapidSecurityResponseRemoval', 'com.apple.applicationaccess'))
+
+    # If greater than macOS 13 (Darwin 22), default this key if blank
+    softwareupdate['allow_prerelease_installation'] = to_bool(get_pref_value('AllowPreReleaseInstallation', 'com.apple.SoftwareUpdate'))
+    if getDarwinVersion() > 21 and softwareupdate['allow_prerelease_installation'] == "":
+        softwareupdate['allow_prerelease_installation'] = 1
+
+    # Use the old enforcedSoftwareUpdateDelay key if enforcedSoftwareUpdateMinorOSDeferredInstallDelay is blank/unset
+    if 'minor_deferred_delay' in softwareupdate and softwareupdate['minor_deferred_delay'] == "":
+        softwareupdate['minor_deferred_delay'] = get_pref_value('enforcedSoftwareUpdateDelay', 'com.apple.applicationaccess')
+
+    # Set key defaults, for macOS 13 (Darwin 22)
+    if getDarwinVersion() > 21 and softwareupdate['allow_rapid_security_response_installation'] == "":
+        softwareupdate['allow_rapid_security_response_installation'] = 1
+    if getDarwinVersion() > 21 and softwareupdate['allow_rapid_security_response_removal'] == "":
+        softwareupdate['allow_rapid_security_response_removal'] = 1
+
+    # Set key defaults, for macOS 11 (Darwin 20)
+    if getDarwinVersion() > 19 and softwareupdate['force_delayed_minor_updates'] == "":
+        softwareupdate['force_delayed_minor_updates'] = 0
+    if getDarwinVersion() > 19 and softwareupdate['force_delayed_major_updates'] == "":
+        softwareupdate['force_delayed_major_updates'] = 0
+
     return softwareupdate
 
 def get_softwareupdate_history():
@@ -123,7 +154,7 @@ def get_xprotect_payloads():
 
     return xprotect
 
-def get_gatekeeper():          
+def get_gatekeeper():
     # If less than 10.8 (Darwin 12), don't collect Gatekeeper data
     if getDarwinVersion() < 12:
         return {}
@@ -140,13 +171,13 @@ def get_gatekeeper():
     for item in out:
         if item == 'CFBundleShortVersionString':
             gatekeeper['gatekeeper_version'] = str(out[item])
-        
+
     stat = os.stat(gatekeeper_plist)
     gatekeeper['gatekeeper_last_modified'] = str(int(stat.st_mtime))
 
     return gatekeeper
 
-def get_gatekeeper_disk():          
+def get_gatekeeper_disk():
     # If less than 10.8 (Darwin 12), don't collect Gatekeeper data
     if getDarwinVersion() < 8:
         return {}
@@ -188,7 +219,7 @@ def get_kext_exclude():
 
     for item in out:
         if item == 'CFBundleShortVersionString':
-            kextexclude['kext_exclude_version'] = str(out[item])   
+            kextexclude['kext_exclude_version'] = str(out[item])
 
     stat = os.stat(info_path)
     kextexclude['kext_exclude_last_modified'] = str(int(stat.st_mtime))
@@ -214,7 +245,7 @@ def get_mrt():
 
     for item in out:
         if item == 'CFBundleShortVersionString':
-            mrt['mrt_version'] = str(out[item])   
+            mrt['mrt_version'] = str(out[item])
 
     stat = os.stat(info_path)
     mrt['mrt_last_modified'] = str(int(stat.st_mtime))
@@ -222,6 +253,8 @@ def get_mrt():
     return mrt
 
 def get_seedutil():
+
+    seedutil = {}
 
     # Get info about Apple Seed program if OS supports it
     if os.path.isfile('/System/Library/PrivateFrameworks/Seeding.framework/Resources/seedutil'):
@@ -231,13 +264,15 @@ def get_seedutil():
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, unused_error) = proc.communicate()
 
-        seedutil = {}
-
         for item in output.decode().split('\n'):
-            if 'Currently enrolled in: ' in item and '(null)' not in item:
-                seedutil["enrolled_seed"] = item.replace("Currently enrolled in: ", "").strip()
-            elif 'Program: ' in item:
-                seedutil["program_seed"] = item.replace("Program: ", "").replace("(null)", "0").strip()
+            if 'Currently enrolled in: ' in item and '(null)' in item:
+                seedutil["program_seed"] = "0"
+            elif 'Currently enrolled in: ' in item and 'CustomerSeed' in item:
+                seedutil["program_seed"] = "1"
+            elif 'Currently enrolled in: ' in item and 'DeveloperSeed' in item:
+                seedutil["program_seed"] = "2"
+            elif 'Currently enrolled in: ' in item and 'PublicSeed' in item:
+                seedutil["program_seed"] = "3"
             elif 'Build is seed: ' in item:
                 seedutil["build_is_seed"] = to_bool(item.replace("Build is seed: ", "").strip())
             elif 'NSShowFeedbackMenu: ' in item:
@@ -245,12 +280,99 @@ def get_seedutil():
             elif 'DisableSeedOptOut: ' in item:
                 seedutil["disable_seed_opt_out"] = to_bool(item.replace("DisableSeedOptOut: ", "").strip())
             elif 'CatalogURL: ' in item and '(null)' not in item:
-                seedutil["catalog_url_seed"] = item.replace("CatalogURL: ", "").strip()        
+                seedutil["catalog_url_seed"] = item.replace("CatalogURL: ", "").strip()
 
-    else:
-        seedutil = {}
+    # Check what kind of seed developer/public seed it is, file is only on macOS 13.4+
+    if os.path.isfile('/Users/Shared/.BetaEnrollmentData.plist'):
+        try:
+            out = FoundationPlist.readPlist('/Users/Shared/.BetaEnrollmentData.plist')
+
+            if "$objects" in out:
+                for item in out["$objects"]:
+                    if isinstance(item,str) and 'macOS' in item and 'Beta' in item:
+                        seedutil["enrolled_seed"] = item
+        except Exception:
+            pass
 
     return seedutil
+
+def get_ddm_info():
+    # Get information about macOS 14+ Declarative Device Management (DDM) software updates
+    result = {}
+
+    if os.path.isfile("/private/var/db/softwareupdate/SoftwareUpdateDDMStatePersistence.plist"):
+        plist = FoundationPlist.readPlist("/private/var/db/softwareupdate/SoftwareUpdateDDMStatePersistence.plist")
+
+        if plist["SUCorePersistedStatePolicyFields"] and plist["SUCorePersistedStatePolicyFields"]["Declarations"]:
+            key_index = 1
+            ddm_info = ""
+            for declaration in plist["SUCorePersistedStatePolicyFields"]["Declarations"]:
+                try:
+                    target_version = plist["SUCorePersistedStatePolicyFields"]["Declarations"][declaration]["TargetOSVersion"]
+                    target_time = plist["SUCorePersistedStatePolicyFields"]["Declarations"][declaration]["TargetLocalDateTime"].replace("T"," ")
+
+                    ddm_info = ddm_info + ("Declaration "+str(key_index)+": macOS "+target_version+" install by "+target_time+"\n")
+
+                    key_index+= 1
+                except:
+                    pass
+
+            result.update({'ddm_info': ddm_info.strip()})
+
+    return result
+
+def get_deferred_updates():
+    # Get information about deferred and available OS updates
+    cmd = ['/usr/libexec/mdmclient', 'AvailableOSUpdates']
+    proc = subprocess.Popen(cmd, shell=False, bufsize=-1, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (output, unused_error) = proc.communicate()
+
+    deferred_updates_out = []
+    deferred_updates = output.decode("utf-8", errors="ignore").split("Available updates (install debug profile for more details): ")[0]
+
+    # Process the text data
+    for update in deferred_updates.split('=== OS Update Item ==='):
+        update_out = {'deferred': 0, 'minor_os_update': 0, 'major_os_update': 0, 'security_response_update': 0, 'product_key': "", 'build': "", 'deferred_until': "", 'download_size': "", 'name': "", 'version': ""}
+        for item in update.split('\n'):
+            if 'Product Key:' in item:
+                update_out["product_key"] = item.replace("Product Key:", "").strip()
+            elif 'Deferred:' in item:
+                update_out["deferred"] = to_bool(item.replace("Deferred:", "").strip().split('  (Date: ')[0].strip())
+            elif 'MacOSUpdate:' in item:
+                update_out["minor_os_update"] = to_bool(item.replace("MacOSUpdate:", "").strip())
+
+        if update_out["product_key"] != "":
+            deferred_updates_out.append(update_out)
+
+    deferred_updates_two = output.decode("utf-8", errors="ignore").split("Available updates (install debug profile for more details): ")[1].strip()
+
+    update_index = 0
+    # Process the text data
+    for update in deferred_updates_two.split('    },'):
+        for item in update.split('\n'):
+
+            update_out = deferred_updates_out[update_index]
+
+            if "Build = " in item:
+                update_out['build'] = item.replace("Build = ", "").replace(";", "").replace('"', "").strip()
+            elif "DeferredUntil = " in item and deferred_updates_out[update_index]["deferred"] == 1:
+                update_out['deferred_until'] = string_to_time(item.replace("DeferredUntil = ", "").replace(";", "").replace('"', "").strip())
+            elif "DownloadSize = " in item:
+                update_out['download_size'] = item.replace("DownloadSize = ", "").replace(";", "").replace('"', "").strip()
+            elif "HumanReadableName = " in item:
+                update_out['name'] = item.replace("HumanReadableName = ", "").replace(";", "").replace('"', "").strip()
+            elif "IsMajorOSUpdate = " in item:
+                update_out['major_os_update'] = to_bool(item.replace("IsMajorOSUpdate = ", "").replace(";", "").replace('"', "").strip())
+            elif "IsSecurityResponse = " in item:
+                update_out['security_response_update'] = to_bool(item.replace("IsSecurityResponse = ", "").replace(";", "").replace('"', "").strip())
+            elif "Version = " in item:
+                update_out['version'] = item.replace("Version = ", "").replace(";", "").replace('"', "").strip()
+
+        update_index += 1
+
+    result = {'deferred_updates': json.dumps(deferred_updates_out)}
+
+    return result
 
 def getDarwinVersion():
     """Returns the Darwin version."""
@@ -261,7 +383,7 @@ def getDarwinVersion():
 def to_bool(s):
     if s == "":
         return ""
-    elif s == True:
+    elif s == True or s == "YES" or s == "Yes" or s == "yes" or s == "1":
         return 1
     else:
         return 0
@@ -290,11 +412,6 @@ def get_pref_value(key, domain):
     else:
         return ""
 
-def merge_two_dicts(x, y):
-    z = x.copy()
-    z.update(y)
-    return z
-
 def main():
     """Main"""
 
@@ -305,14 +422,23 @@ def main():
     # Get results
     result = dict()
 
-    result = merge_two_dicts(get_software_update(), get_xprotect())
-    result = merge_two_dicts(result, get_softwareupdate_history())
-    result = merge_two_dicts(result, get_gatekeeper())
-    result = merge_two_dicts(result, get_gatekeeper_disk())
-    result = merge_two_dicts(result, get_kext_exclude())
-    result = merge_two_dicts(result, get_mrt())
-    result = merge_two_dicts(result, get_seedutil())
-    result = merge_two_dicts(result, get_xprotect_payloads())
+    result.update(get_xprotect())
+    result.update(get_software_update())
+    result.update(get_softwareupdate_history())
+    result.update(get_gatekeeper())
+    result.update(get_gatekeeper_disk())
+    result.update(get_kext_exclude())
+    result.update(get_mrt())
+    result.update(get_seedutil())
+    result.update(get_xprotect_payloads())
+    result.update(get_ddm_info())
+
+    # If greater than macOS 11 (Darwin 20), collect deferred macOS updates
+    if getDarwinVersion() > 20:
+        try:
+            result.update(get_deferred_updates())
+        except:
+            pass
 
     # Write softwareupdate results to cache file
     cachedir = '%s/cache' % os.path.dirname(os.path.realpath(__file__))

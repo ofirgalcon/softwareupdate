@@ -13,7 +13,7 @@ class Softwareupdate_controller extends Module_controller
         // Store module path
         $this->module_path = dirname(__FILE__);
     }
-	
+
     /**
      * Get softwareupdate information for serial_number
      *
@@ -22,7 +22,7 @@ class Softwareupdate_controller extends Module_controller
     public function get_tab_data($serial_number = '')
     {
         jsonView([
-            Softwareupdate_model::select('softwareupdate.automaticcheckenabled', 'softwareupdate.automaticdownload', 'softwareupdate.configdatainstall', 'softwareupdate.criticalupdateinstall', 'softwareupdate.auto_update', 'softwareupdate.auto_update_restart_required', 'softwareupdate.lastattemptsystemversion', 'softwareupdate.lastbackgroundsuccessfuldate', 'softwareupdate.lastfullsuccessfuldate', 'softwareupdate.lastsuccessfuldate', 'softwareupdate.lastresultcode', 'softwareupdate.lastsessionsuccessful', 'softwareupdate.lastupdatesavailable', 'softwareupdate.lastrecommendedupdatesavailable', 'softwareupdate.recommendedupdates', 'softwareupdate.inactiveupdates', 'softwareupdate.catalogurl', 'softwareupdate.skiplocalcdn', 'softwareupdate.skip_download_lack_space', 'softwareupdate.eval_critical_if_unchanged', 'softwareupdate.one_time_force_scan_enabled', 'softwareupdate.xprotect_version', 'softwareupdate.mrxprotect',  'softwareupdate.xprotect_payloads_version', 'softwareupdate.xprotect_payloads_last_modified', 'softwareupdate.gatekeeper_version', 'softwareupdate.gatekeeper_last_modified', 'softwareupdate.gatekeeper_disk_version', 'softwareupdate.gatekeeper_disk_last_modified', 'softwareupdate.kext_exclude_version', 'softwareupdate.kext_exclude_last_modified', 'softwareupdate.mrt_version', 'softwareupdate.mrt_last_modified', 'softwareupdate.enrolled_seed', 'softwareupdate.program_seed', 'softwareupdate.build_is_seed', 'softwareupdate.show_feedback_menu', 'softwareupdate.disable_seed_opt_out', 'softwareupdate.catalog_url_seed', 'softwareupdate.softwareupdate_history')
+            Softwareupdate_model::select('softwareupdate.automaticcheckenabled', 'softwareupdate.automaticdownload', 'softwareupdate.configdatainstall', 'softwareupdate.criticalupdateinstall', 'softwareupdate.auto_update', 'softwareupdate.auto_update_restart_required', 'softwareupdate.allow_prerelease_installation', 'softwareupdate.lastattemptsystemversion', 'softwareupdate.lastbackgroundsuccessfuldate', 'softwareupdate.lastfullsuccessfuldate', 'softwareupdate.lastsuccessfuldate', 'softwareupdate.lastresultcode', 'softwareupdate.lastsessionsuccessful', 'softwareupdate.lastupdatesavailable', 'softwareupdate.lastrecommendedupdatesavailable', 'softwareupdate.recommendedupdates', 'softwareupdate.inactiveupdates', 'softwareupdate.catalogurl', 'softwareupdate.skiplocalcdn', 'softwareupdate.skip_download_lack_space', 'softwareupdate.eval_critical_if_unchanged', 'softwareupdate.one_time_force_scan_enabled', 'softwareupdate.managed_do_it_later_deferral_count', 'softwareupdate.managed_product_keys', 'softwareupdate.maximum_managed_do_it_later_deferral_count', 'softwareupdate.force_delayed_minor_updates', 'softwareupdate.minor_deferred_delay', 'softwareupdate.force_delayed_major_updates', 'softwareupdate.major_deferred_delay', 'softwareupdate.allow_rapid_security_response_installation', 'softwareupdate.allow_rapid_security_response_removal', 'softwareupdate.ddm_info', 'softwareupdate.deferred_updates', 'softwareupdate.xprotect_version', 'softwareupdate.mrxprotect',  'softwareupdate.xprotect_payloads_version', 'softwareupdate.xprotect_payloads_last_modified', 'softwareupdate.gatekeeper_version', 'softwareupdate.gatekeeper_last_modified', 'softwareupdate.gatekeeper_disk_version', 'softwareupdate.gatekeeper_disk_last_modified', 'softwareupdate.kext_exclude_version', 'softwareupdate.kext_exclude_last_modified', 'softwareupdate.mrt_version', 'softwareupdate.mrt_last_modified', 'softwareupdate.program_seed', 'softwareupdate.enrolled_seed', 'softwareupdate.catalog_url_seed', 'softwareupdate.softwareupdate_history')
             ->whereSerialNumber($serial_number)
             ->filter()
             ->limit(1)
@@ -50,6 +50,21 @@ class Softwareupdate_controller extends Module_controller
                 ->toArray()
         );
     }
+
+    public function get_binary_widgetx($column = '')
+    {
+        jsonView(
+            Softwareupdate_model::selectRaw("IF($column = 0, 0, 1) AS label")
+                ->selectRaw('count(*) AS count')
+                ->whereNotNull($column)
+                ->filter()
+                ->groupBy('label') // Group by the label instead of the original column
+                ->orderBy('count', 'desc')
+                ->get()
+                ->toArray()
+        );
+    }
+    
 
     public function get_scroll_widget($column = '')
     {
@@ -80,9 +95,9 @@ class Softwareupdate_controller extends Module_controller
 
         $out = [];
         foreach($update_count as $label => $value){
-                $out[] = ['label' => $label, 'count' => $value];
+            $out[] = ['label' => $label, 'count' => $value];
         }
-        
-        jsonView($out);        
+
+        jsonView($out);
     }
 } 
