@@ -51,6 +51,21 @@ class Softwareupdate_controller extends Module_controller
         );
     }
 
+    public function get_binary_widgetx($column = '')
+    {
+        jsonView(
+            Softwareupdate_model::selectRaw("IF($column = 0, 0, 1) AS label")
+                ->selectRaw('count(*) AS count')
+                ->whereNotNull($column)
+                ->filter()
+                ->groupBy('label') // Group by the label instead of the original column
+                ->orderBy('count', 'desc')
+                ->get()
+                ->toArray()
+        );
+    }
+    
+
     public function get_scroll_widget($column = '')
     {
         $this->get_binary_widget($column);

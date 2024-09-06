@@ -56,6 +56,8 @@ widgets:
         view: softwareupdate_allow_rsr_installation_widget
     softwareupdate_allow_rsr_removal:
         view: softwareupdate_allow_rsr_removal_widget
+    softwareupdate_outofdate:
+        view: softwareupdate_outofdate_widget    
 reports:
     softwareupdate_report:
         view: softwareupdate_report
