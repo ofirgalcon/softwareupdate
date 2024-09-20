@@ -1,8 +1,8 @@
 type: button
 widget_id: su_outofdate-widget
 api_url: /module/softwareupdate/get_binary_widgetx/lastrecommendedupdatesavailable
-i18n_title: softwareupdate.lastrecommendedupdatesavailable_widget
-icon: fa-apple
+i18n_title: softwareupdate.mac_os_uptodate
+icon: fa-check-square
 listing_link: /show/listing/softwareupdate/softwareupdate
 buttons:
   - label: 1
