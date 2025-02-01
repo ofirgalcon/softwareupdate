@@ -63,3 +63,23 @@ var ManagedDeferralCounterFilter = function(colNumber, d){
         d.search.value = '';
     }
 }
+
+var uptodateFilter = function(colNumber, d){
+    // Look for 'not_safety_frozen' keyword
+    if(d.search.value.match(/^macos_updtodate$/))
+    {
+        // Add column specific search
+        d.columns[colNumber].search.value = '= 0';
+        // Clear global search
+        d.search.value = '';
+    }
+
+    // Look for 'safety_frozen' keyword
+    if(d.search.value.match(/^macos_not_updtodate$/))
+    {
+        // Add column specific search
+        d.columns[colNumber].search.value = '!= 0';
+        // Clear global search
+        d.search.value = '';
+    }
+}
