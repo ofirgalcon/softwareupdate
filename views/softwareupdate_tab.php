@@ -149,8 +149,8 @@ $(document).on('appReady', function(){
                             `<td style="min-width:75px;">${update.build || ''}</td>` +
                             `<td style="min-width:75px;">${update.deferred === 1 ? i18n.t('yes') : i18n.t('no')}</td>` +
                             `<td style="min-width:200px;">${update.deferred_until ? formatDate(update.deferred_until) : ''}</td>` +
-                            `<td style="min-width:130px;">${update.major_os_update === '1' ? i18n.t('yes') : i18n.t('no')}</td>` +
-                            `<td style="min-width:130px;">${update.minor_os_update === '1' ? i18n.t('yes') : i18n.t('no')}</td>` +
+                            `<td style="min-width:130px;">${update.major_os_update === 1 ? i18n.t('yes') : i18n.t('no')}</td>` +
+                            `<td style="min-width:130px;">${update.minor_os_update === 1 ? i18n.t('yes') : i18n.t('no')}</td>` +
                             `<td style="min-width:100px;">${update.download_size ? fileSize(update.download_size, 2) : ''}</td>` +
                             `<td style="min-width:100px;">${update.product_key || ''}</td>` +
                         '</tr>');
