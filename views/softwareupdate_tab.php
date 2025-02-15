@@ -147,7 +147,7 @@ $(document).on('appReady', function(){
                             `<td style="min-width:200px;">${update.name || ''}</td>` +
                             `<td style="min-width:75px;">${update.version || ''}</td>` +
                             `<td style="min-width:75px;">${update.build || ''}</td>` +
-                            `<td style="min-width:75px;">${update.deferred === '1' ? i18n.t('yes') : i18n.t('no')}</td>` +
+                            `<td style="min-width:75px;">${update.deferred === 1 ? i18n.t('yes') : i18n.t('no')}</td>` +
                             `<td style="min-width:200px;">${update.deferred_until ? formatDate(update.deferred_until) : ''}</td>` +
                             `<td style="min-width:130px;">${update.major_os_update === '1' ? i18n.t('yes') : i18n.t('no')}</td>` +
                             `<td style="min-width:130px;">${update.minor_os_update === '1' ? i18n.t('yes') : i18n.t('no')}</td>` +
