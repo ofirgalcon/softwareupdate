@@ -290,3 +290,23 @@ var force_minor_deferred_filter = function(colNumber, d){
         d.search.value = '';
     }
 }
+
+var lastsessionsuccessful_filter = function(colNumber, d){
+    // Look for 'last_session_off' keyword
+    if(d.search.value.match(/^last_session_off$/))
+    {
+        // Add column specific search
+        d.columns[colNumber].search.value = '= 0';
+        // Clear global search
+        d.search.value = '';
+    }
+
+    // Look for 'last_session_on' keyword
+    if(d.search.value.match(/^last_session_on$/))
+    {
+        // Add column specific search
+        d.columns[colNumber].search.value = '= 1';
+        // Clear global search
+        d.search.value = '';
+    }
+}

@@ -120,3 +120,8 @@ table:
         i18n_header: softwareupdate.auto_update
         filter: auto_update_filter
         formatter: softwareUpdateYesNo
+    -
+        column: softwareupdate.lastsessionsuccessful
+        i18n_header: softwareupdate.lastsessionsuccessful
+        filter: lastsessionsuccessful_filter
+        formatter: format_softwareupdate_yes_no_rev
