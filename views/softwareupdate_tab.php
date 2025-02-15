@@ -87,7 +87,7 @@ $(document).on('appReady', function(){
                          'lastsessionsuccessful', 'allow_rapid_security_response_installation',
                          'allow_rapid_security_response_removal'].includes(prop)) {
                     if (value !== -1) {
-                        sections.main.push(`<tr><th>${i18n.t('softwareupdate.'+prop)}</th><td>${i18n.t(value ? 'yes' : 'no')}</td></tr>`);
+                        sections.main.push(`<tr><th>${i18n.t('softwareupdate.'+prop)}</th><td>${i18n.t(parseInt(value) === 1 ? 'yes' : 'no')}</td></tr>`);
                     }
                 }
                 // Handle delayed updates
